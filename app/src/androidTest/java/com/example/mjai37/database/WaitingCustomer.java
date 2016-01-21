@@ -1,13 +1,28 @@
 package com.example.mjai37.database;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by mjai37 on 1/21/2016.
  */
+
+@DatabaseTable(tableName = "WAITING_CUSTOMER")
 public class WaitingCustomer {
+
+    @DatabaseField
     private String name;
+
+    @DatabaseField
     private String cellNumber;
+
+    @DatabaseField
     private String totalPeople;
+
+    @DatabaseField
     private String waitingTime;
+
+    @DatabaseField
     private String estimatedWaitingTime;
 
     public String getName() {
