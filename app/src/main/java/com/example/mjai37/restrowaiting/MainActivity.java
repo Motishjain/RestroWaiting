@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public void openAddCustomerScreen(View v) {
         // TODO Auto-generated method stub
         Intent myIntent = new Intent(this,
-                AddCustomerActivity.class);
+                AddWaitingCustomerActivity.class);
         startActivity(myIntent);
 
     }

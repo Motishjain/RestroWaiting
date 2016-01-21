@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddCustomerActivity"
+            android:name=".AddWaitingCustomerActivity"
             android:label="@string/title_activity_add_customer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

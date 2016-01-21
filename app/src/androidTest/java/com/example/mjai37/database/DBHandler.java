@@ -1,42 +1,65 @@
 package com.example.mjai37.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.mjai37.restrowaiting.R;
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import java.sql.SQLException;
 
 /**
  * Created by mjai37 on 1/21/2016.
  */
-public class DBHandler extends SQLiteOpenHelper {
+public class DBHandler extends OrmLiteSqliteOpenHelper {
 
+
+    private static final String DATABASE_NAME = "waitingCustomers.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "waitingCustomersDB";
-    private static final String TABLE_WAITING_CUSTOMERS = "waitingCustomers";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_CELL_PHONE = "cellPhone";
-    private static final String COLUMN_TOTAL_PEOPLE = "totalPeople";
-    private static final String COLUMN_WAITING_TIME = "waitingTime";
-    private static final String COLUMN_EST_WAITING_TIME = "estWaitingTime";
+    private Dao<WaitingCustomer, Integer> waitingCustomersDao;
 
-
-    public DBHandler(Context context, String name,
-                     SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    public DBHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        String CREATE_PRODUCTS_TABLE = "CREATE TABLE " +
-                TABLE_WAITING_CUSTOMERS + "("
-                + COLUMN_NAME + " TEXT," + COLUMN_CELL_PHONE
-                + " TEXT," + COLUMN_TOTAL_PEOPLE + " TEXT, " + COLUMN_WAITING_TIME +"TEXT, "+ COLUMN_EST_WAITING_TIME +" TEXT)";
-        db.execSQL(CREATE_PRODUCTS_TABLE);
+    public void onCreate(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource) {
+        try {
+            // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
+            TableUtils.createTable(connectionSource, WaitingCustomer.class);
+
+        } catch (SQLException e) {
+            Log.e(DBHandler.class.getName(), "Unable to create datbases", e);
+        }
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion,
-                          int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WAITING_CUSTOMERS);
-        onCreate(db);
+    public void onUpgrade(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource, int oldVer, int newVer) {
+        try {
+            // In case of change in database of next version of application, please increase the value of DATABASE_VERSION variable, then this method will be invoked
+            //automatically. Developer needs to handle the upgrade logic here, i.e. create a new table or a new column to an existing table, take the backups of the
+            // existing database etc.
+            TableUtils.dropTable(connectionSource, WaitingCustomer.class, true);
+            onCreate(sqliteDatabase, connectionSource);
+        } catch (SQLException e) {
+            Log.e(DBHandler.class.getName(), "Unable to upgrade database from version " + oldVer + " to new "
+                    + newVer, e);
+        }
+    }
+
+    // Create the getDao methods of all database tables to access those from android code.
+    // Insert, delete, read, update everything will be happened through DAOs
+
+    public Dao<WaitingCustomer, Integer> getTeacherDao() throws SQLException {
+        if (waitingCustomersDao == null) {
+            waitingCustomersDao = getDao(WaitingCustomer.class);
+        }
+        return waitingCustomersDao;
     }
 }
