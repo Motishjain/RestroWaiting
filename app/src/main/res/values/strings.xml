@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">RestroWaiting</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_add_customer">AddCustomerActivity</string>
-
+    <string name="title_activity_add_waiting_customer">AddWaitingCustomerActivity</string>
 </resources>
